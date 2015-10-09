@@ -2,6 +2,7 @@ requirejs.config({
 	baseUrl: '../',
 	paths  : {
 		es6  : 'bower_components/requirejs-babel/es6',
-		babel: 'bower_components/requirejs-babel/babel-5.8.22.min'
+		babel: 'bower_components/requirejs-babel/babel-5.8.22.min',
+		_    : 'bower_components/underscore/underscore-min'
 	}
 })
