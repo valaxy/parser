@@ -16,5 +16,19 @@ define(function (require) {
 		assert.ok(!pd.isNonTerminal('b'))
 	})
 
+	QUnit.test('getNonTerminals()', function (assert) {
+		var pd = new ProductionCollection
+		assert.deepEqual(pd.getNonTerminals(), [])
+
+		pd.add(new Production('A', ['a', 'A', 'B']))
+		assert.deepEqual(pd.getNonTerminals(), ['A'])
+
+		pd.add(new Production('B', ['b']))
+		assert.deepEqual(pd.getNonTerminals(), ['A', 'B'])
+
+		pd.add(new Production('A'))
+		assert.deepEqual(pd.getNonTerminals(), ['A', 'B'])
+	})
+
 
 })
