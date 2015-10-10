@@ -1,1 +1,4 @@
 bower_components/
+lib/*.js
+!lib/*.es6.js
+
