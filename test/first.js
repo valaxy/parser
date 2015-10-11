@@ -45,7 +45,7 @@ define(function (require) {
 		})
 	})
 
-	QUnit.test('complex case1', function (assert) {
+	QUnit.test('complex case', function (assert) {
 		var pd = new ProductionCollection
 		pd.add(new Production('E', ['T', "E'"]))
 		pd.add(new Production("E'", ['+', 'T', "E'"]))
@@ -63,5 +63,12 @@ define(function (require) {
 			"T'": ['*', Production.EMPTY],
 			"F" : ['(', 'id']
 		})
+	})
+
+	QUnit.test('fail case', function (assert) {
+		var pd = new ProductionCollection
+		pd.add(new Production('A', ['A', 'a']))
+		assert.equal(first(pd), null)
+
 	})
 })
