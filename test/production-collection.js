@@ -1,6 +1,6 @@
 define(function (require) {
-	var ProductionCollection = require('es6!../lib/production-collection')
-	var Production = require('es6!../lib/production')
+	var ProductionCollection = require('../lib/production-collection')
+	var Production = require('../lib/production')
 
 	QUnit.module('ProductionCollection')
 
@@ -30,5 +30,18 @@ define(function (require) {
 		assert.deepEqual(pd.getNonTerminals(), ['A', 'B'])
 	})
 
+
+	QUnit.test('getProductionsBySymbol()', function (assert) {
+		var pd = new ProductionCollection
+		var p1 = new Production('A')
+		var p2 = new Production('B')
+		var p3 = new Production('A')
+		pd.add(p1)
+		pd.add(p2)
+		pd.add(p3)
+		assert.deepEqual(pd.getProductionsBySymbol('A'), [p1, p3])
+		assert.deepEqual(pd.getProductionsBySymbol('B'), [p2])
+		assert.deepEqual(pd.getProductionsBySymbol('C'), [])
+	})
 
 })

@@ -1,5 +1,5 @@
 define(function (require) {
-	var Production = require('es6!../lib/production')
+	var Production = require('../lib/production')
 
 	QUnit.module('Production')
 
