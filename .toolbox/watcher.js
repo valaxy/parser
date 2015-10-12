@@ -1,5 +1,4 @@
 module.exports = {
-	version                   : '0.0.0',
 	excludesOnFileRelativePath: [
 		/^bower_components/,
 		/^\.idea/,
@@ -11,8 +10,9 @@ module.exports = {
 		program                : 'babel',
 		arguments              : [
 			'$FilePath',
-			'--out-file ${DirPath}/${FileNameWithoutAllExtensions}.js'
+			'--out-file ${DirPath}/${FileNameWithoutAllExtensions}.js',
+			'--source-maps true'
 		],
-		matchOnfileRelativePath: /\.es6\.js$/
+		matchOnFileRelativePath: /\.es6\.js$/
 	}]
 }
