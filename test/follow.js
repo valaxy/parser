@@ -54,22 +54,38 @@ define(function (require) {
 		})
 	})
 
-	QUnit.test('complex case', function (assert) {
-		var pd = new ProductionCollection
-		pd.add(new Production('E', ['T', "E'"]))
-		pd.add(new Production("E'", ['+', 'T', "E'"]))
-		pd.add(new Production("E'", [Production.EMPTY]))
-		pd.add(new Production('T', ['F', "T'"]))
-		pd.add(new Production("T'", ['*', 'F', "T'"]))
-		pd.add(new Production("T'", [Production.EMPTY]))
-		pd.add(new Production('F', ['(', 'E', ')']))
-		pd.add(new Production('F', ['id']))
+
+	QUnit.test('complex case1', function (assert) {
+		var pd = new ProductionCollection([
+			["T", ["F", "T'"]],
+			["T'", ['*', "F", "T'"]],
+			["T'", [Production.EMPTY]],
+			["F", ['id']]
+		])
+		assert.deepEqual(convertFollow(follow(pd, 'T')), {
+			"T" : [Production.END],
+			"T'": [Production.END],
+			"F" : ['*', Production.END]
+		})
+	})
+
+	QUnit.test('complex case2', function (assert) {
+		var pd = new ProductionCollection([
+			['E', ['T', "E'"]],
+			["E'", ['+', 'T', "E'"]],
+			["E'", [Production.EMPTY]],
+			['T', ['F', "T'"]],
+			["T'", ['*', 'F', "T'"]],
+			["T'", [Production.EMPTY]],
+			['F', ['(', 'E', ')']],
+			['F', ['id']]
+		])
 		assert.deepEqual(convertFollow(follow(pd, 'E')), {
 			"E" : [')', Production.END],
 			"E'": [')', Production.END],
-			"T" : ['+', ')', Production.END],
-			"T'": ['+', ')', Production.END],
-			"F" : ['+', '*', ')', Production.END]
+			"T" : [')', '+', Production.END],
+			"T'": [')', '+', Production.END],
+			"F" : [')', '*', '+', Production.END]
 		})
 	})
 

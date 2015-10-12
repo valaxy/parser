@@ -46,15 +46,17 @@ define(function (require) {
 	})
 
 	QUnit.test('complex case', function (assert) {
-		var pd = new ProductionCollection
-		pd.add(new Production('E', ['T', "E'"]))
-		pd.add(new Production("E'", ['+', 'T', "E'"]))
-		pd.add(new Production("E'", [Production.EMPTY]))
-		pd.add(new Production('T', ['F', "T'"]))
-		pd.add(new Production("T'", ['*', 'F', "T'"]))
-		pd.add(new Production("T'", [Production.EMPTY]))
-		pd.add(new Production('F', ['(', 'E', ')']))
-		pd.add(new Production('F', ['id']))
+		var pd = new ProductionCollection([
+			['E', ['T', "E'"]],
+			["E'", ['+', 'T', "E'"]],
+			["E'", [Production.EMPTY]],
+			['T', ['F', "T'"]],
+			["T'", ['*', 'F', "T'"]],
+			["T'", [Production.EMPTY]],
+			['F', ['(', 'E', ')']],
+			['F', ['id']]
+		])
+
 		assert.deepEqual(pd.getNonTerminals(), ['E', "E'", 'T', "T'", 'F'])
 		assert.deepEqual(first(pd), {
 			"E" : ['(', 'id'],
