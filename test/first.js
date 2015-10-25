@@ -1,7 +1,7 @@
 define(function (require) {
-	var first                = require('../lib/first'),
-	    ProductionCollection = require('../lib/production-collection'),
-	    Production           = require('../lib/production')
+	var first                = require('cjs!../dist/first'),
+	    ProductionCollection = require('cjs!../dist/production-collection'),
+	    Production           = require('cjs!../dist/production')
 
 
 	QUnit.module('first')

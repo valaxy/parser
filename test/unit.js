@@ -3,6 +3,7 @@ define(function (require) {
 	require('./production-collection')
 	require('./first')
 	require('./follow')
+	require('./predict-table')
 
 	QUnit.load()
 	QUnit.start()

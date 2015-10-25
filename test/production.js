@@ -1,5 +1,5 @@
 define(function (require) {
-	var Production = require('../lib/production')
+	var Production = require('cjs!../dist/production')
 
 	QUnit.module('Production')
 

@@ -1,6 +1,6 @@
 define(function (require) {
-	var ProductionCollection = require('../lib/production-collection')
-	var Production = require('../lib/production')
+	var ProductionCollection = require('cjs!../dist/production-collection')
+	var Production = require('cjs!../dist/production')
 
 	QUnit.module('ProductionCollection')
 

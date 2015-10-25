@@ -19,6 +19,7 @@
     "underscore": "~1.8.3"
   },
   "devDependencies": {
-    "qunit": "~1.19.0"
+    "qunit": "~1.19.0",
+    "cjs": "*"
   }
 }

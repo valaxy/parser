@@ -1,7 +1,7 @@
 define(function (require) {
-	var follow               = require('../lib/follow'),
-	    ProductionCollection = require('../lib/production-collection'),
-	    Production           = require('../lib/production'),
+	var follow               = require('cjs!../dist/follow'),
+	    ProductionCollection = require('cjs!../dist/production-collection'),
+	    Production           = require('cjs!../dist/production'),
 	    _                    = require('underscore')
 
 	var convertFollow = follow._followToJSON
