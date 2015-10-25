@@ -1,5 +1,6 @@
 bower_components/
-lib/*.js
-lib/*.js.map
-!lib/*.es6.js
+node_modules/
+.idea/
+
+dist/
 

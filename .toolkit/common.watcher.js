@@ -1,11 +1,10 @@
 module.exports = {
-	excludesOnFileRelativePath: [
-		/^bower_components/,
-		/^\.idea/,
-		/^\.git/,
+	matchOnFileRelativePath: [
+		/^lib/
 	],
-	tasks                     : [{
+	tasks                  : [{
 		isEnabled              : true,
+		name                   : 'es6',
 		description            : 'compile es6 to es5',
 		program                : 'babel',
 		arguments              : [
