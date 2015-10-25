@@ -44,4 +44,19 @@ define(function (require) {
 		assert.deepEqual(pd.getProductionsBySymbol('C'), [])
 	})
 
+	QUnit.test('eachProduction()', function (assert) {
+		var pd = new ProductionCollection([
+			['A', []],
+			['B', []],
+			['B', ['a']],
+			['C', ['a', 'b']]
+		])
+
+		var result = []
+		pd.eachProduction(function (production) {
+			result.push(production.head())
+		})
+		assert.deepEqual(result, ['A', 'B', 'B', 'C'])
+	})
+
 })
