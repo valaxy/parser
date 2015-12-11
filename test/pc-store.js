@@ -8,12 +8,29 @@ define(function (require) {
 		// id+id
 		// id+id+id+id
 		sample1: function () {
-			var pc = new ProductionCollection
-			pc.add(new Production('E', ['T', 'F']))
-			pc.add(new Production('T', ['id']))
-			pc.add(new Production('F', ['+', 'E']))
-			pc.add(new Production('F'))
-			return pc
+			return new ProductionCollection([
+				['E', ['T', 'F']],
+				['T', ['id']],
+				['F', ['+', 'E']],
+				['F']
+			])
+		},
+
+		// id
+		// (id)
+		// id+id
+		// id+id*id+id
+		sample2: function () {
+			return new ProductionCollection([
+				['E', ['T', 'EE']],
+				['EE', ['+', 'T', 'EE']],
+				['EE', [Production.EMPTY]],
+				['T', ['F', 'TT']],
+				['TT', ['*', 'F', 'TT']],
+				['TT', [Production.EMPTY]],
+				['F', ['(', 'E', ')']],
+				['F', ['id']]
+			])
 		}
 	}
 

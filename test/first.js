@@ -4,15 +4,16 @@ define(function (require) {
 	    Production           = require('cjs!../dist/production'),
 	    pcStore              = require('./pc-store')
 
-
 	QUnit.module('first')
-
 
 	QUnit.test('simple case1', function (assert) {
 		var pc = new ProductionCollection
 		pc.add(new Production('A', ['a', 'b']))
 		assert.deepEqual(first(pc), {
-			A: ['a']
+			A: {
+				0     : ['a'],
+				result: ['a']
+			}
 		})
 	})
 
@@ -21,8 +22,14 @@ define(function (require) {
 		pc.add(new Production('A', ['a', 'b', 'B']))
 		pc.add(new Production('B', ['b', 'c']))
 		assert.deepEqual(first(pc), {
-			A: ['a'],
-			B: ['b']
+			A: {
+				0     : ['a'],
+				result: ['a']
+			},
+			B: {
+				0     : ['b'],
+				result: ['b']
+			}
 		})
 	})
 
@@ -31,7 +38,11 @@ define(function (require) {
 		pc.add(new Production('A', ['a', 'b']))
 		pc.add(new Production('A', ['b', 'c']))
 		assert.deepEqual(first(pc), {
-			A: ['a', 'b']
+			A: {
+				0     : ['a'],
+				1     : ['b'],
+				result: ['a', 'b']
+			}
 		})
 	})
 
@@ -41,46 +52,75 @@ define(function (require) {
 		pc.add(new Production('A', ['a', 'b']))
 		pc.add(new Production('A', ['a']))
 		assert.deepEqual(first(pc), {
-			S: ['c'],
-			A: ['a']
-		})
-	})
-
-	QUnit.test('complex case', function (assert) {
-		var pc = new ProductionCollection([
-			['E', ['T', "E'"]],
-			["E'", ['+', 'T', "E'"]],
-			["E'", [Production.EMPTY]],
-			['T', ['F', "T'"]],
-			["T'", ['*', 'F', "T'"]],
-			["T'", [Production.EMPTY]],
-			['F', ['(', 'E', ')']],
-			['F', ['id']]
-		])
-
-		assert.deepEqual(pc.getNonTerminals(), ['E', "E'", 'T', "T'", 'F'])
-		assert.deepEqual(first(pc), {
-			"E" : ['(', 'id'],
-			"E'": ['+', Production.EMPTY],
-			"T" : ['(', 'id'],
-			"T'": ['*', Production.EMPTY],
-			"F" : ['(', 'id']
+			S: {
+				0     : ['c'],
+				result: ['c']
+			},
+			A: {
+				0     : ['a'],
+				1     : ['a'],
+				result: ['a']
+			}
 		})
 	})
 
 	QUnit.test('fail case', function (assert) {
 		var pc = new ProductionCollection
 		pc.add(new Production('A', ['A', 'a']))
-		assert.equal(first(pc), null)
+		assert.throws(function () {
+			first(pc)
+		})
 	})
 
 
 	QUnit.test('sample1', function (assert) {
 		var pc = pcStore.sample1()
 		assert.deepEqual(first(pc), {
-			E: ['id'],
-			T: ['id'],
-			F: ['+', Production.EMPTY]
+			E: {
+				0     : ['id'],
+				result: ['id']
+			},
+			T: {
+				0     : ['id'],
+				result: ['id']
+			},
+			F: {
+				0     : ['+'],
+				1     : [Production.EMPTY],
+				result: ['+', Production.EMPTY]
+			}
 		})
 	})
+
+
+	QUnit.test('sample2', function (assert) {
+		var pc = pcStore.sample2()
+		assert.deepEqual(pc.getNonTerminals(), ['E', 'EE', 'T', 'TT', 'F'])
+		assert.deepEqual(first(pc), {
+			E : {
+				0     : ['(', 'id'],
+				result: ['(', 'id']
+			},
+			EE: {
+				0     : ['+'],
+				1     : [Production.EMPTY],
+				result: ['+', Production.EMPTY]
+			},
+			T : {
+				0     : ['(', 'id'],
+				result: ['(', 'id']
+			},
+			TT: {
+				0     : ['*'],
+				1     : [Production.EMPTY],
+				result: ['*', Production.EMPTY]
+			},
+			F : {
+				0     : ['('],
+				1     : ['id'],
+				result: ['(', 'id']
+			}
+		})
+	})
+
 })
