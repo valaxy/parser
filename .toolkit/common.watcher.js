@@ -10,7 +10,7 @@ module.exports = {
 		program                : 'babel',
 		arguments              : [
 			'$filePath',
-			'--out-file ${projectPath}dist/${fileNameWithoutAllExtensions}.js',
+			'--out-file ${projectPath}/dist/${fileNameWithoutAllExtensions}.js',
 			'--source-maps true'
 		],
 		matchOnFileRelativePath: '**/*.es6.js'

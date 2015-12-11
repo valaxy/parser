@@ -11,8 +11,8 @@ define(function (require) {
 		pc.add(new Production('A', ['a', 'b']))
 		assert.deepEqual(first(pc), {
 			A: {
-				0     : ['a'],
-				result: ['a']
+				0    : ['a'],
+				total: ['a']
 			}
 		})
 	})
@@ -23,12 +23,12 @@ define(function (require) {
 		pc.add(new Production('B', ['b', 'c']))
 		assert.deepEqual(first(pc), {
 			A: {
-				0     : ['a'],
-				result: ['a']
+				0    : ['a'],
+				total: ['a']
 			},
 			B: {
-				0     : ['b'],
-				result: ['b']
+				0    : ['b'],
+				total: ['b']
 			}
 		})
 	})
@@ -39,9 +39,9 @@ define(function (require) {
 		pc.add(new Production('A', ['b', 'c']))
 		assert.deepEqual(first(pc), {
 			A: {
-				0     : ['a'],
-				1     : ['b'],
-				result: ['a', 'b']
+				0    : ['a'],
+				1    : ['b'],
+				total: ['a', 'b']
 			}
 		})
 	})
@@ -53,13 +53,13 @@ define(function (require) {
 		pc.add(new Production('A', ['a']))
 		assert.deepEqual(first(pc), {
 			S: {
-				0     : ['c'],
-				result: ['c']
+				0    : ['c'],
+				total: ['c']
 			},
 			A: {
-				0     : ['a'],
-				1     : ['a'],
-				result: ['a']
+				0    : ['a'],
+				1    : ['a'],
+				total: ['a']
 			}
 		})
 	})
@@ -77,17 +77,17 @@ define(function (require) {
 		var pc = pcStore.sample1()
 		assert.deepEqual(first(pc), {
 			E: {
-				0     : ['id'],
-				result: ['id']
+				0    : ['id'],
+				total: ['id']
 			},
 			T: {
-				0     : ['id'],
-				result: ['id']
+				0    : ['id'],
+				total: ['id']
 			},
 			F: {
-				0     : ['+'],
-				1     : [Production.EMPTY],
-				result: ['+', Production.EMPTY]
+				0    : ['+'],
+				1    : [Production.EMPTY],
+				total: ['+', Production.EMPTY]
 			}
 		})
 	})
@@ -98,27 +98,27 @@ define(function (require) {
 		assert.deepEqual(pc.getNonTerminals(), ['E', 'EE', 'T', 'TT', 'F'])
 		assert.deepEqual(first(pc), {
 			E : {
-				0     : ['(', 'id'],
-				result: ['(', 'id']
+				0    : ['(', 'id'],
+				total: ['(', 'id']
 			},
 			EE: {
-				0     : ['+'],
-				1     : [Production.EMPTY],
-				result: ['+', Production.EMPTY]
+				0    : ['+'],
+				1    : [Production.EMPTY],
+				total: ['+', Production.EMPTY]
 			},
 			T : {
-				0     : ['(', 'id'],
-				result: ['(', 'id']
+				0    : ['(', 'id'],
+				total: ['(', 'id']
 			},
 			TT: {
-				0     : ['*'],
-				1     : [Production.EMPTY],
-				result: ['*', Production.EMPTY]
+				0    : ['*'],
+				1    : [Production.EMPTY],
+				total: ['*', Production.EMPTY]
 			},
 			F : {
-				0     : ['('],
-				1     : ['id'],
-				result: ['(', 'id']
+				0    : ['('],
+				1    : ['id'],
+				total: ['(', 'id']
 			}
 		})
 	})
