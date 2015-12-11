@@ -1,6 +1,7 @@
 module.exports = {
 	matchOnFileRelativePath: [
-		/^lib/
+		'lib',
+		'lib/**/*'
 	],
 	tasks                  : [{
 		isEnabled              : true,
@@ -8,10 +9,10 @@ module.exports = {
 		description            : 'compile es6 to es5',
 		program                : 'babel',
 		arguments              : [
-			'$FilePath',
-			'--out-file ${DirPath}/${FileNameWithoutAllExtensions}.js',
+			'$filePath',
+			'--out-file ${projectPath}dist/${fileNameWithoutAllExtensions}.js',
 			'--source-maps true'
 		],
-		matchOnFileRelativePath: /\.es6\.js$/
+		matchOnFileRelativePath: '**/*.es6.js'
 	}]
 }

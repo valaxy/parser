@@ -4,6 +4,7 @@ define(function (require) {
 	require('./first')
 	require('./follow')
 	require('./predict-table')
+	require('./predict')
 
 	QUnit.load()
 	QUnit.start()
