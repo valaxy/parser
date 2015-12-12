@@ -1,7 +1,7 @@
-var getFirst = require('./first')
-var getFollow = require('./follow')
-var PredictTable = require('./predict-table')
-var Production = require('./production')
+var getFirst = require('./deduce-first')
+var getFollow = require('./deduce-follow')
+var PredictTable = require('./data/predict')
+var Production = require('./data/production')
 
 
 /** 计算预测分析表 */

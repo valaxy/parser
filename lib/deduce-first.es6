@@ -1,4 +1,5 @@
-var Production = require('./production')
+var Production = require('./data/production'),
+    _          = require('underscore')
 
 // 计算FIRST(α)表:
 // - 可从α推导得到的串的首符号的集合(终结符号)

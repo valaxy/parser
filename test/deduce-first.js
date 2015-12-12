@@ -1,15 +1,15 @@
 define(function (require) {
-	var first                = require('cjs!../dist/first'),
-	    ProductionCollection = require('cjs!../dist/production-collection'),
-	    Production           = require('cjs!../dist/production'),
+	var deduceFirst          = require('cjs!../dist/deduce-first'),
+	    ProductionCollection = require('cjs!../dist/data/production-collection'),
+	    Production           = require('cjs!../dist/data/production'),
 	    pcStore              = require('./pc-store')
 
-	QUnit.module('first')
+	QUnit.module('deduceFirst()')
 
 	QUnit.test('simple case1', function (assert) {
 		var pc = new ProductionCollection
 		pc.add(new Production('A', ['a', 'b']))
-		assert.deepEqual(first(pc), {
+		assert.deepEqual(deduceFirst(pc), {
 			A: {
 				0    : ['a'],
 				total: ['a']
@@ -21,7 +21,7 @@ define(function (require) {
 		var pc = new ProductionCollection
 		pc.add(new Production('A', ['a', 'b', 'B']))
 		pc.add(new Production('B', ['b', 'c']))
-		assert.deepEqual(first(pc), {
+		assert.deepEqual(deduceFirst(pc), {
 			A: {
 				0    : ['a'],
 				total: ['a']
@@ -37,7 +37,7 @@ define(function (require) {
 		var pc = new ProductionCollection
 		pc.add(new Production('A', ['a', 'b']))
 		pc.add(new Production('A', ['b', 'c']))
-		assert.deepEqual(first(pc), {
+		assert.deepEqual(deduceFirst(pc), {
 			A: {
 				0    : ['a'],
 				1    : ['b'],
@@ -51,7 +51,7 @@ define(function (require) {
 		pc.add(new Production('S', ['c', 'A', 'd']))
 		pc.add(new Production('A', ['a', 'b']))
 		pc.add(new Production('A', ['a']))
-		assert.deepEqual(first(pc), {
+		assert.deepEqual(deduceFirst(pc), {
 			S: {
 				0    : ['c'],
 				total: ['c']
@@ -68,14 +68,14 @@ define(function (require) {
 		var pc = new ProductionCollection
 		pc.add(new Production('A', ['A', 'a']))
 		assert.throws(function () {
-			first(pc)
+			deduceFirst(pc)
 		})
 	})
 
 
 	QUnit.test('sample1', function (assert) {
 		var pc = pcStore.sample1()
-		assert.deepEqual(first(pc), {
+		assert.deepEqual(deduceFirst(pc), {
 			E: {
 				0    : ['id'],
 				total: ['id']
@@ -96,7 +96,7 @@ define(function (require) {
 	QUnit.test('sample2', function (assert) {
 		var pc = pcStore.sample2()
 		assert.deepEqual(pc.getNonTerminals(), ['E', 'EE', 'T', 'TT', 'F'])
-		assert.deepEqual(first(pc), {
+		assert.deepEqual(deduceFirst(pc), {
 			E : {
 				0    : ['(', 'id'],
 				total: ['(', 'id']

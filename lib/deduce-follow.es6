@@ -1,6 +1,6 @@
-var Production = require('./production')
+var Production = require('./data/production')
 var _ = require('underscore')
-var getFirst = require('./first')
+var deduceFirst = require('./deduce-first')
 
 
 // 计算FOLLOW(A)
@@ -110,7 +110,7 @@ var initFollow = function (pd, endNonTerminal) {
  ** endNonTerminal: 非终结符
  ** first:          optional first array
  */
-var getFollow = function (pc, endNonTerminal, first = getFirst(pc)) {
+var getFollow = function (pc, endNonTerminal, first = deduceFirst(pc)) {
 	var follow = initFollow(pc, endNonTerminal)
 	var state = recordState(follow)
 	while (true) {

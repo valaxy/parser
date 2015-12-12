@@ -1,12 +1,12 @@
 define(function (require) {
-	var follow               = require('cjs!../dist/follow'),
-	    ProductionCollection = require('cjs!../dist/production-collection'),
-	    Production           = require('cjs!../dist/production'),
+	var follow               = require('cjs!../dist/deduce-follow'),
+	    ProductionCollection = require('cjs!../dist/data/production-collection'),
+	    Production           = require('cjs!../dist/data/production'),
 	    pcStore              = require('./pc-store')
 
 	var convertFollow = follow._followToJSON
 
-	QUnit.module('follow')
+	QUnit.module('deduceFollow()')
 
 	QUnit.test('_initFollow()', function (assert) {
 		var pd = new ProductionCollection

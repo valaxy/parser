@@ -9,10 +9,12 @@ module.exports = {
 		description            : 'compile es6 to es5',
 		program                : 'babel',
 		arguments              : [
-			'$filePath',
-			'--out-file ${projectPath}/dist/${fileNameWithoutAllExtensions}.js',
-			'--source-maps true'
+			'$filePath'
 		],
-		matchOnFileRelativePath: '**/*.es6.js'
+		createOutputFromStdout : true,
+		outputPath             : function (info) {
+			return info.projectPath + '/dist/' + info.dirRelativePath.substr('lib/'.length) + '/' + info.fileNameWithoutAllExtensions + '.js'
+		},
+		matchOnFileRelativePath: '**/*.es6'
 	}]
 }

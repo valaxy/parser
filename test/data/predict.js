@@ -1,10 +1,10 @@
 define(function (require) {
-	var PredictTable = require('cjs!../dist/predict-table')
+	var Predict = require('cjs!../../dist/data/predict')
 
-	QUnit.module('PredictTable')
+	QUnit.module('Predict')
 
-	QUnit.test('getPredict/setPredict', function (assert) {
-		var pt = new PredictTable
+	QUnit.test('getPredict()/setPredict()', function (assert) {
+		var pt = new Predict
 		assert.equal(pt.getPredict('A', 'a'), null)
 
 		pt.setPredict('A', 'a', 1)
@@ -12,7 +12,7 @@ define(function (require) {
 	})
 
 	QUnit.test('toJSON()', function (assert) {
-		var pt = new PredictTable
+		var pt = new Predict
 		assert.deepEqual(pt.toJSON(), {})
 
 		pt.setPredict('A', 'a', 1)

@@ -1,4 +1,4 @@
-class PredictTable {
+class Predict {
 	constructor() {
 		this._predict = {}
 	}
@@ -27,4 +27,4 @@ class PredictTable {
 	}
 }
 
-module.exports = PredictTable
+module.exports = Predict

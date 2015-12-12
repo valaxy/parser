@@ -1,10 +1,12 @@
 define(function (require) {
-	require('./production')
-	require('./production-collection')
-	require('./first')
-	require('./follow')
-	require('./predict-table')
-	require('./predict')
+	require('./data/production')
+	require('./data/production-collection')
+	require('./data/first')
+	require('./data/predict')
+
+	require('./deduce-first')
+	require('./deduce-follow')
+	require('./deduce-predict')
 
 	QUnit.load()
 	QUnit.start()
