@@ -9,3 +9,4 @@ Some Alg about parser.
 - calc first by productions
 - calc follow by productions
 - calc predict table by productions
+- LL algorithm by predict table

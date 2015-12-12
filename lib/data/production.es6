@@ -22,6 +22,10 @@ class Production {
 			this._body = body
 		}
 	}
+
+	toJSON() {
+		return [this._head, this._body]
+	}
 }
 
 Production.EMPTY = "0"

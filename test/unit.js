@@ -7,6 +7,7 @@ define(function (require) {
 	require('./deduce-first')
 	require('./deduce-follow')
 	require('./deduce-predict')
+	require('./ll')
 
 	QUnit.load()
 	QUnit.start()
