@@ -1,13 +1,13 @@
-var getFirst = require('./deduce-first')
-var getFollow = require('./deduce-follow')
+var deduceFirst = require('./deduce-first')
+var deduceFollow = require('./deduce-follow')
 var PredictTable = require('./data/predict')
 var Production = require('./data/production')
 
 
 /** 计算预测分析表 */
 module.exports = function (pc, endNonTerminal) {
-	var first = getFirst(pc)
-	var follow = getFollow(pc, endNonTerminal, first)
+	var first = deduceFirst(pc)
+	var follow = deduceFollow(pc, endNonTerminal, first)
 	var predictTable = new PredictTable()
 	predictTable._first = first
 	predictTable._follow = follow
@@ -15,7 +15,7 @@ module.exports = function (pc, endNonTerminal) {
 
 	pc.getNonTerminals().forEach(function (head) {
 		pc.getProductionsBySymbol(head).forEach(function (production, index) {
-			var firstSymbols = first[head][index]
+			var firstSymbols = first.get(head, index)
 			firstSymbols.forEach(function (symbol) {
 				if (symbol != Production.EMPTY) {
 					predictTable.setPredict(head, symbol, production)

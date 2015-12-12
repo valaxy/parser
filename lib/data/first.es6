@@ -1,9 +1,8 @@
 var _ = require('underscore')
 
-const STATE_DEFAULT = 0
-const STATE_CHECKING = 1
-const STATE_CHECKED = 2
-
+// each item:
+//      total:    total result
+//      0,1,2,..: for each production result
 class First {
 	constructor(productionCollection) {
 		this._firsts = {}
@@ -16,7 +15,6 @@ class First {
 		var productionCount = this._pc.getProductionsBySymbol(grammarSymbol).length
 
 		var firstSymbolResult = this._firsts[grammarSymbol] = {}
-		firstSymbolResult.state = STATE_CHECKING    // mark for algorithm of deduce-first
 		firstSymbolResult.length = productionCount  // how many sub productions of headSymbol for algorithm of deduce-first
 
 		// total-set is union of each independent index-set
@@ -30,18 +28,30 @@ class First {
 	}
 
 	/** Called Before init() */
-	add(grammarSymbol, symbol, productionIndex) {
+	add(grammarSymbol, symbol, productionIndex = -1) {
 		var firstSymbolResult = this._firsts[grammarSymbol]
-		if (firstSymbolResult.total.has(symbol)) throw new Error('symbol:' + symbol + ' already exist in headSymbol:' + grammarSymbol)
-
-		firstSymbolResult.total.add(symbol)
-		firstSymbolResult[productionIndex].add(symbol)
+		if (productionIndex < 0) {
+			firstSymbolResult.total.add(symbol)
+		} else {
+			firstSymbolResult[productionIndex].add(symbol)
+		}
 		return this
 	}
 
-	has(grammarSymbol, symbol, index = -1) {
-		var position = index < 0 ? 'total' : String(index)
+	/** Called Before init() */
+	has(grammarSymbol, symbol, productionIndex = -1) {
+		var position = productionIndex < 0 ? 'total' : String(productionIndex)
 		return grammarSymbol in this._firsts && this._firsts[grammarSymbol][position].has(symbol)
+	}
+
+	/** Called Before init() */
+	get(grammarSymbol, productionIndex = -1) {
+		var firstSymbolResult = this._firsts[grammarSymbol]
+		if (productionIndex < 0) {
+			return Array.from(firstSymbolResult.total)
+		} else {
+			return Array.from(firstSymbolResult[productionIndex])
+		}
 	}
 
 	toJSON() {

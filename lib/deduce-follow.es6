@@ -113,6 +113,8 @@ var initFollow = function (pd, endNonTerminal) {
 var getFollow = function (pc, endNonTerminal, first = deduceFirst(pc)) {
 	var follow = initFollow(pc, endNonTerminal)
 	var state = recordState(follow)
+
+	first = first.toJSON()
 	while (true) {
 		calc(pc, first, follow)
 		var nextState = recordState(follow)
