@@ -15,9 +15,7 @@ const STATE_DEDUCED = 2
 
 /** 计算FIRST表
  ** pc: ProductionCollection
- ** return: a Object
- **     - key is symbol
- **     - value is Array, a collection of symbols, at index is each symbols of Production
+ ** return: First
  */
 module.exports = function (pc) {
 	var first = new First(pc)

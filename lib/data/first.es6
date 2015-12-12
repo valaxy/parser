@@ -87,3 +87,6 @@ class First {
 }
 
 module.exports = First
+
+//**     - key is symbol
+//**     - value is Array, a collection of symbols, at index is each symbols of Production

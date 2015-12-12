@@ -35,13 +35,13 @@ var addSetToSet = function (follow1, follow2) {
 	}
 }
 
-var addFirstToSet = function (firstItem, s) {
-	for (var key of firstItem.total) {
+var addFirstToSet = function (first, symbol, s) {
+	first.get(symbol).forEach(function (key) {
 		s.add(key)
-	}
+	})
 }
 
-var calc = function (pc, first, follow) {
+var deduce = function (pc, first, follow) {
 	pc.getNonTerminals().forEach(function (nonTerminal) {
 		pc.getProductionsBySymbol(nonTerminal).forEach(function (production) {
 			var body = production.body()
@@ -60,13 +60,14 @@ var calc = function (pc, first, follow) {
 				}
 				addSetToSet(restFirst, follow[ch])
 
-				if (first[ch].total.indexOf(Production.EMPTY) >= 0) { // todo, bug!, 以前用的是 in xx, 添加测试单元测试用例保证
+				if (first.has(ch, Production.EMPTY)) { // todo, bug!, 以前用的是 in xx(xx实际是个Array), 添加测试单元测试用例保证
 					// keep allIsEmpty
-					addFirstToSet(first[ch], restFirst)
+					addFirstToSet(first, ch, restFirst)
 					restFirst.delete(Production.EMPTY)
 				} else {
 					allIsEmpty = false
-					restFirst = new Set(first[ch].total)
+					restFirst = new Set
+					addFirstToSet(first, ch, restFirst)
 				}
 			}
 		})
@@ -114,9 +115,8 @@ var getFollow = function (pc, endNonTerminal, first = deduceFirst(pc)) {
 	var follow = initFollow(pc, endNonTerminal)
 	var state = recordState(follow)
 
-	first = first.toJSON()
 	while (true) {
-		calc(pc, first, follow)
+		deduce(pc, first, follow)
 		var nextState = recordState(follow)
 		if (isStateEqual(state, nextState)) { // there are no more changes to follow set
 			break
