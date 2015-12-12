@@ -6,7 +6,7 @@ define(function (require) {
 
 	QUnit.module('deduceFirst()')
 
-	QUnit.test('simple case1', function (assert) {
+	QUnit.test('case1', function (assert) {
 		var pc = new ProductionCollection([
 			['A', ['a', 'b']]
 		])
@@ -19,7 +19,7 @@ define(function (require) {
 		})
 	})
 
-	QUnit.test('simple case2', function (assert) {
+	QUnit.test('case2', function (assert) {
 		var pc = new ProductionCollection([
 			['A', ['a', 'b', 'B']],
 			['B', ['b', 'c']]
@@ -38,7 +38,7 @@ define(function (require) {
 		})
 	})
 
-	QUnit.test('simple case3', function (assert) {
+	QUnit.test('case3', function (assert) {
 		var pc = new ProductionCollection([
 			['A', ['a', 'b']],
 			['A', ['b', 'c']]
@@ -53,7 +53,7 @@ define(function (require) {
 		})
 	})
 
-	QUnit.test('simple case4', function (assert) {
+	QUnit.test('case4', function (assert) {
 		var pc = new ProductionCollection([
 			['S', ['c', 'A', 'd']],
 			['A', ['a', 'b']],
@@ -70,6 +70,19 @@ define(function (require) {
 				1     : ['a'],
 				total : ['a'],
 				length: 2
+			}
+		})
+	})
+
+	QUnit.test('case5', function (assert) {
+		var pc = new ProductionCollection([
+			['S', [Production.EMPTY, 'a']]
+		])
+		assert.deepEqual(deduceFirst(pc).toJSON(), {
+			S: {
+				0     : ['a'],
+				total : ['a'],
+				length: 1
 			}
 		})
 	})

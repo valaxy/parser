@@ -20,13 +20,11 @@ const STATE_DEDUCED = 2
 module.exports = function (pc) {
 	var first = new First(pc)
 
-	var mergeTo = function (fromSymbol, toSymbol, productionIndex) {
-		first.get(fromSymbol).forEach((symbol) => {
-			first.add(toSymbol, symbol, productionIndex)
-		})
+	var merge = function (fromSymbol, toSymbol, productionIndex) {
 		first.get(fromSymbol).forEach((symbol) => {
 			if (symbol != Production.EMPTY) {
 				first.add(toSymbol, symbol)
+				first.add(toSymbol, symbol, productionIndex)
 			}
 		})
 	}
@@ -49,43 +47,45 @@ module.exports = function (pc) {
 
 
 	// recursive calc
-	var deduce = function (productionHead) {
-		switch (getState(productionHead)) {
+	var deduce = function (nonTerminal) {
+		switch (getState(nonTerminal)) {
 			case STATE_NULL:
 				break
 			case STATE_DEDUCING:
-				throw new Error('a loop there when deduce first')
+				throw new Error('a loop there when deduce first at productionHead:' + nonTerminal)
 			case STATE_DEDUCED:
 				return
 		}
 
 
-		first.init(productionHead)
-		initState(productionHead)
+		first.init(nonTerminal)
+		initState(nonTerminal)
 
-		var productions = pc.getProductionsBySymbol(productionHead)
-		for (var productionIndex = 0; productionIndex < productions.length; productionIndex++) {
-			var production = productions[productionIndex]
+		var productions = pc.getProductionsBySymbol(nonTerminal)
+		productions.forEach((production, productionIndex) => {
 			var body = production.body()
 			for (var i = 0; i < body.length; i++) {
 				var bodySymbol = body[i]
 
 				if (pc.isTerminal(bodySymbol)) {
-					first.add(productionHead, bodySymbol, productionIndex)
-					first.add(productionHead, bodySymbol)
-					if (bodySymbol != Production.EMPTY) break
+					if (bodySymbol != Production.EMPTY) {
+						first.add(nonTerminal, bodySymbol)
+						first.add(nonTerminal, bodySymbol, productionIndex)
+						break
+					}
 				} else {
 					deduce(bodySymbol)
-					mergeTo(bodySymbol, productionHead, productionIndex)
+					merge(bodySymbol, nonTerminal, productionIndex)
 					if (!first.has(bodySymbol, Production.EMPTY)) break
 				}
 			}
-			if (i == body.length) { // no break
-				first.add(productionHead, Production.EMPTY)
+			if (i == body.length) { // not break
+				first.add(nonTerminal, Production.EMPTY)
+				first.add(nonTerminal, Production.EMPTY, productionIndex)
 			}
-		}
+		})
 
-		finishState(productionHead)
+		finishState(nonTerminal)
 	}
 
 
