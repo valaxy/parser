@@ -2,6 +2,7 @@ define(function (require) {
 	require('./data/production')
 	require('./data/production-collection')
 	require('./data/first')
+	require('./data/follow')
 	require('./data/predict')
 
 	require('./deduce-first')
