@@ -67,6 +67,7 @@ var deduce = function (pc, first, follow) {
 					groupFirstSetWithoutEmpty = new Set
 					addFirstToSet(first, bodySymbol, groupFirstSetWithoutEmpty) // there is no empty
 				}
+				//groupFirstSetWithoutEmpty.add(bodySymbol) // process extend data
 			}
 		})
 	})

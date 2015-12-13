@@ -25,6 +25,10 @@ class Predict {
 	toJSON() {
 		return this._predict
 	}
+
+	toExtendJSON() {
+		return this._predict
+	}
 }
 
 module.exports = Predict

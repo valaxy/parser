@@ -35,7 +35,7 @@ define(function (require) {
 
 		// {}
 		// {KEY:VALUE,}
-		// {KEY:{KEY:VALUE},KEY:VALUE,}
+		// {KEY:{KEY:VALUE,},KEY:VALUE,}
 		sample3: function () {
 			return new ProductionCollection([
 				['value', ['VALUE']],

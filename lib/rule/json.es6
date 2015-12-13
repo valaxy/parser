@@ -6,7 +6,7 @@ var json = new ProductionCollection([
 	['value', ['number']],
 	['value', ['object']],
 	['value', ['array']],
-	['object', ['{', 'objectBody', '}']],
+	['object', ['{', 'objectBody', '}']], // <- root
 	['objectBody'],
 	['objectBody', ['objectMember', 'objectMembers']],
 	['objectMembers'],

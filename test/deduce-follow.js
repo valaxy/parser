@@ -2,8 +2,7 @@ define(function (require) {
 	var deduceFollow         = require('cjs!../dist/deduce-follow'),
 	    ProductionCollection = require('cjs!../dist/data/production-collection'),
 	    Production           = require('cjs!../dist/data/production'),
-	    pcStore              = require('./pc-store'),
-	    Follow               = require('cjs!../dist/data/follow')
+	    pcStore              = require('./pc-store')
 
 	QUnit.module('deduceFollow()')
 
@@ -61,29 +60,7 @@ define(function (require) {
 		})
 	})
 
-
 	QUnit.test('case5', function (assert) {
-		var pc = new ProductionCollection([
-			['E', ['T', "E'"]],
-			["E'", ['+', 'T', "E'"]],
-			["E'", [Production.EMPTY]],
-			['T', ['F', "T'"]],
-			["T'", ['*', 'F', "T'"]],
-			["T'", [Production.EMPTY]],
-			['F', ['(', 'E', ')']],
-			['F', ['id']]
-		])
-		assert.deepEqual(deduceFollow(pc, 'E').toJSON(), {
-			"E" : [')', Production.END],
-			"E'": [')', Production.END],
-			"T" : [')', '+', Production.END],
-			"T'": [')', '+', Production.END],
-			"F" : [')', '*', '+', Production.END]
-		})
-	})
-
-
-	QUnit.test('case6', function (assert) {
 		var pc = new ProductionCollection([
 			['A', ['D', Production.EMPTY]],
 			['B', ['a']],
@@ -99,7 +76,7 @@ define(function (require) {
 	})
 
 
-	QUnit.test('case7', function (assert) {
+	QUnit.test('case6', function (assert) {
 		var pc = new ProductionCollection([
 			['A', ['B', Production.EMPTY, 'C']],
 			['B', ['b']],
@@ -120,5 +97,43 @@ define(function (require) {
 			T: ['+', Production.END],
 			F: [Production.END]
 		})
+	})
+
+	QUnit.test('sample2', function (assert) {
+		var pc = pcStore.sample2()
+		assert.deepEqual(deduceFollow(pc, 'E').toJSON(), {
+			E : [')', Production.END],
+			EE: [')', Production.END],
+			T : [')', '+', Production.END],
+			TT: [')', '+', Production.END],
+			F : [')', '*', '+', Production.END]
+		})
+	})
+
+
+	QUnit.test('sample3', function (assert) {
+		var pc = pcStore.sample3()
+		assert.deepEqual(deduceFollow(pc, 'object').toJSON(), {
+			value  : [','],
+			object : [',', Production.END],
+			member : ['KEY', '}'],
+			members: ['}']
+		})
+	})
+
+
+	QUnit.test('sample json', function (assert) {
+		var pc = require('cjs!../dist/rule/json')
+		assert.deepEqual(deduceFollow(pc, 'object').toJSON(), {
+			value        : [',', ']', '}'],
+			object       : [',', Production.END, ']', '}'],
+			objectBody   : ['}'],
+			objectMembers: ['}'],
+			objectMember : [',', '}'],
+			array        : [',', ']', '}'],
+			arrayBody    : [']'],
+			arrayMembers : [']']
+		})
+
 	})
 })
