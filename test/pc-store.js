@@ -9,7 +9,7 @@ define(function (require) {
 		// id+id+id+id
 		sample1: function () {
 			return new ProductionCollection([
-				['E', ['T', 'F']],
+				['E', ['T', 'F']], // <- root
 				['T', ['id']],
 				['F', ['+', 'E']],
 				['F']
@@ -22,7 +22,7 @@ define(function (require) {
 		// id+id*id+id
 		sample2: function () {
 			return new ProductionCollection([
-				['E', ['T', 'EE']],
+				['E', ['T', 'EE']], // <- root
 				['EE', ['+', 'T', 'EE']],
 				['EE', [Production.EMPTY]],
 				['T', ['F', 'TT']],
@@ -30,6 +30,20 @@ define(function (require) {
 				['TT', [Production.EMPTY]],
 				['F', ['(', 'E', ')']],
 				['F', ['id']]
+			])
+		},
+
+		// {}
+		// {KEY:VALUE,}
+		// {KEY:{KEY:VALUE},KEY:VALUE,}
+		sample3: function () {
+			return new ProductionCollection([
+				['value', ['VALUE']],
+				['value', ['object']],
+				['object', ['{', 'members', '}']], // <- root
+				['member', ['KEY', ':', 'value', ',']],
+				['members'],
+				['members', ['member', 'members']]
 			])
 		}
 	}

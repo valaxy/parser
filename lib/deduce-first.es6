@@ -21,9 +21,9 @@ module.exports = function (pc) {
 	var first = new First(pc)
 
 	var merge = function (fromSymbol, toSymbol, productionIndex) {
-		first.get(fromSymbol).forEach((symbol) => {
+		// @日志: 如果需要扩展表的数据, 这里一定要用getExtend而不是get
+		first.getExtend(fromSymbol).forEach((symbol) => {  // add extend data
 			if (symbol != Production.EMPTY) {
-				first.add(toSymbol, symbol)
 				first.add(toSymbol, symbol, productionIndex)
 			}
 		})
@@ -69,18 +69,22 @@ module.exports = function (pc) {
 
 				if (pc.isTerminal(bodySymbol)) {
 					if (bodySymbol != Production.EMPTY) {
-						first.add(nonTerminal, bodySymbol)
 						first.add(nonTerminal, bodySymbol, productionIndex)
 						break
 					}
 				} else {
 					deduce(bodySymbol)
 					merge(bodySymbol, nonTerminal, productionIndex)
-					if (!first.has(bodySymbol, Production.EMPTY)) break
+					if (bodySymbol != Production.EMPTY) {
+						// @日志: 如果需要扩展表的数据, 这里一定要把非终结符的bodySymbol也加上
+						first.add(nonTerminal, bodySymbol, productionIndex) // process about extend first
+					}
+					if (!first.has(bodySymbol, Production.EMPTY)) {
+						break
+					}
 				}
 			}
 			if (i == body.length) { // not break
-				first.add(nonTerminal, Production.EMPTY)
 				first.add(nonTerminal, Production.EMPTY, productionIndex)
 			}
 		})

@@ -40,14 +40,13 @@ define(function (require) {
 		// after add
 		first.init('B')
 		first.add('A', 'a', 1)
-		first.add('A', 'b')
 		first.add('B', 'A', 0)
 		assert.deepEqual(first.toJSON(), {
 			A: {
 				length: 2,
 				0     : [],
 				1     : ['a'],
-				total : ['b']
+				total : ['a']
 			},
 			B: {
 				length: 1,
@@ -60,12 +59,12 @@ define(function (require) {
 				length: 2,
 				0     : [],
 				1     : ['a'],
-				total : ['b']
+				total : ['a']
 			},
 			B: {
 				length: 1,
 				0     : ['A'],
-				total : []
+				total : ['A']
 			}
 		})
 	})
@@ -76,10 +75,11 @@ define(function (require) {
 		assert.ok(!first.has('A', 'a', 0))
 
 		first.init('A').add('A', 'a', 0)
-		assert.ok(!first.has('A', 'a'))
-		assert.ok(first.has('A', 'a', 0))
-
-		first.add('A', 'a')
 		assert.ok(first.has('A', 'a'))
+		assert.ok(first.has('A', 'a', 0))
+	})
+
+	QUnit.test('ok()', function (assert) {
+		assert.ok(true)
 	})
 })

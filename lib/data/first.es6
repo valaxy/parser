@@ -28,13 +28,10 @@ class First {
 	}
 
 	/** Called Before init() */
-	add(grammarSymbol, symbol, productionIndex = -1) {
+	add(grammarSymbol, symbol, productionIndex) {
 		var firstSymbolResult = this._firsts[grammarSymbol]
-		if (productionIndex < 0) {
-			firstSymbolResult.total.add(symbol)
-		} else {
-			firstSymbolResult[productionIndex].add(symbol)
-		}
+		firstSymbolResult.total.add(symbol)
+		firstSymbolResult[productionIndex].add(symbol)
 		return this
 	}
 
@@ -46,14 +43,9 @@ class First {
 
 	/** Called Before init() */
 	get(grammarSymbol, productionIndex = -1) {
-		var firstSymbolResult = this._firsts[grammarSymbol]
-		if (productionIndex < 0) {
-			return Array.from(firstSymbolResult.total)
-		} else {
-			return Array.from(firstSymbolResult[productionIndex])
-		}
+		return _.filter(this.getExtend(grammarSymbol, productionIndex), (symbol) => this._pc.isTerminal(symbol))
 	}
-
+	
 	toJSON() {
 		return _.mapObject(this._firsts, (eachFirstSymbolResult) => {
 			var result = {length: eachFirstSymbolResult.length}
@@ -69,6 +61,16 @@ class First {
 			}
 			return result
 		})
+	}
+
+	/** Called Before init() */
+	getExtend(grammarSymbol, productionIndex = -1) {
+		var firstSymbolResult = this._firsts[grammarSymbol]
+		if (productionIndex < 0) {
+			return Array.from(firstSymbolResult.total)
+		} else {
+			return Array.from(firstSymbolResult[productionIndex])
+		}
 	}
 
 	toExtendJSON() {
@@ -87,6 +89,16 @@ class First {
 }
 
 module.exports = First
+
+//add(grammarSymbol, symbol, productionIndex = -1) {
+//	var firstSymbolResult = this._firsts[grammarSymbol]
+//	if (productionIndex < 0) {
+//		firstSymbolResult.total.add(symbol)
+//	} else {
+//		firstSymbolResult[productionIndex].add(symbol)
+//	}
+//	return this
+//}
 
 //**     - key is symbol
 //**     - value is Array, a collection of symbols, at index is each symbols of Production
