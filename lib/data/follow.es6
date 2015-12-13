@@ -21,8 +21,17 @@ class Follow {
 		}
 	}
 
+	addTo(fromSymbol, toSymbol) {
+		var from = this._follows[fromSymbol]
+		this.addRange(toSymbol, from)
+	}
+
 	has(grammarSymbol, symbol) {
 		return this._follows[grammarSymbol].has(symbol)
+	}
+
+	get(grammarSymbol) {
+		return Array.from(this._follows[grammarSymbol])
 	}
 
 	toJSON() {

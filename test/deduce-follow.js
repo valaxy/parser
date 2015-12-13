@@ -2,36 +2,28 @@ define(function (require) {
 	var deduceFollow         = require('cjs!../dist/deduce-follow'),
 	    ProductionCollection = require('cjs!../dist/data/production-collection'),
 	    Production           = require('cjs!../dist/data/production'),
-	    pcStore              = require('./pc-store')
-
-	var convertFollow = deduceFollow._followToJSON
+	    pcStore              = require('./pc-store'),
+	    Follow               = require('cjs!../dist/data/follow')
 
 	QUnit.module('deduceFollow()')
 
-	QUnit.test('_initFollow()', function (assert) {
-		var pd = new ProductionCollection
-		pd.add(new Production('A'))
-		pd.add(new Production('B', ['A']))
-		assert.deepEqual(convertFollow(deduceFollow._initFollow(pd, 'B')), {
-			A: [],
-			B: [Production.END]
-		})
-	})
-
 	QUnit.test('_recordState()', function (assert) {
-		var state = deduceFollow._recordState({
-			A: new Set(['a', 'b']),
-			B: new Set(['a']),
-			C: new Set(['c', '1', '2']),
-			D: new Set([])
-		})
+		var follow = {
+			_follows: {
+				A: new Set(['a', 'b']),
+				B: new Set(['a']),
+				C: new Set(['c', '1', '2']),
+				D: new Set([])
+			}
+		}
+		var state = deduceFollow._recordState(follow)
 		assert.deepEqual(state, [2, 1, 3, 0])
 	})
 
 	QUnit.test('simple case1', function (assert) {
 		var pc = new ProductionCollection
 		pc.add(new Production('A'))
-		assert.deepEqual(convertFollow(deduceFollow(pc, 'A')), {
+		assert.deepEqual(deduceFollow(pc, 'A').toJSON(), {
 			A: [Production.END]
 		})
 	})
@@ -39,7 +31,7 @@ define(function (require) {
 	QUnit.test('simple case2', function (assert) {
 		var pc = new ProductionCollection
 		pc.add(new Production('A', ['a', 'b']))
-		assert.deepEqual(convertFollow(deduceFollow(pc, 'A')), {
+		assert.deepEqual(deduceFollow(pc, 'A').toJSON(), {
 			A: [Production.END]
 		})
 	})
@@ -48,7 +40,7 @@ define(function (require) {
 		var pc = new ProductionCollection
 		pc.add(new Production('A', ['a', 'B', 'c']))
 		pc.add(new Production('B', ['x']))
-		assert.deepEqual(convertFollow(deduceFollow(pc, 'A')), {
+		assert.deepEqual(deduceFollow(pc, 'A').toJSON(), {
 			A: [Production.END],
 			B: ['c']
 		})
@@ -62,7 +54,7 @@ define(function (require) {
 			["T'", [Production.EMPTY]],
 			["F", ['id']]
 		])
-		assert.deepEqual(convertFollow(deduceFollow(pc, 'T')), {
+		assert.deepEqual(deduceFollow(pc, 'T').toJSON(), {
 			"T" : [Production.END],
 			"T'": [Production.END],
 			"F" : ['*', Production.END]
@@ -81,7 +73,7 @@ define(function (require) {
 			['F', ['(', 'E', ')']],
 			['F', ['id']]
 		])
-		assert.deepEqual(convertFollow(deduceFollow(pc, 'E')), {
+		assert.deepEqual(deduceFollow(pc, 'E').toJSON(), {
 			"E" : [')', Production.END],
 			"E'": [')', Production.END],
 			"T" : [')', '+', Production.END],
@@ -93,7 +85,7 @@ define(function (require) {
 
 	QUnit.test('sample1', function (assert) {
 		var pc = pcStore.sample1()
-		assert.deepEqual(convertFollow(deduceFollow(pc, 'E')), {
+		assert.deepEqual(deduceFollow(pc, 'E').toJSON(), {
 			E: [Production.END],
 			T: ['+', Production.END],
 			F: [Production.END]

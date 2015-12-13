@@ -22,7 +22,7 @@ module.exports = function (pc, endNonTerminal) {
 				}
 			})
 			if (firstSymbols.indexOf(Production.EMPTY) >= 0) {
-				follow[head].forEach(function (symbol) {
+				follow.get(head).forEach(function (symbol) {
 					predictTable.setPredict(head, symbol, production)
 				})
 			}

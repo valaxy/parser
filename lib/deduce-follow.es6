@@ -1,6 +1,7 @@
 var Production = require('./data/production')
 var _ = require('underscore')
-var deduceFirst = require('./deduce-first')
+var deduceFirst = require('./deduce-first'),
+    Follow      = require('./data/follow')
 
 
 // 计算FOLLOW(A)
@@ -21,19 +22,6 @@ var deduceFirst = require('./deduce-first')
  *      addFirstToSet(_.keys(first[ch]), restFirst)
  *-------------------------------------------------------------------*/
 
-
-var followToJSON = function (follow) {
-	return _.mapObject(follow, function (s) {
-		return Array.from(s).sort()
-	})
-}
-
-// add follow1 to follow2
-var addSetToSet = function (follow1, follow2) {
-	for (var s of follow1) {
-		follow2.add(s)
-	}
-}
 
 var addFirstToSet = function (first, symbol, s) {
 	first.get(symbol).forEach(function (key) {
@@ -56,9 +44,9 @@ var deduce = function (pc, first, follow) {
 				}
 
 				if (allIsEmpty) {
-					addSetToSet(follow[production.head()], follow[ch])
+					follow.addTo(production.head(), ch)
 				}
-				addSetToSet(restFirst, follow[ch])
+				follow.addRange(ch, restFirst)
 
 				if (first.has(ch, Production.EMPTY)) { // todo, bug!, 以前用的是 in xx(xx实际是个Array), 添加测试单元测试用例保证
 					// keep allIsEmpty
@@ -76,13 +64,13 @@ var deduce = function (pc, first, follow) {
 
 
 var recordState = function (follow) {
-	return _.map(follow, function (x) {
-		return x.size
+	return _.map(follow._follows, function (followSet) {
+		return followSet.size
 	})
 }
 
 var isStateEqual = function (state1, state2) {
-	if (state1.length != state2.length) { // count
+	if (state1.length != state2.length) {
 		return false
 	}
 
@@ -95,24 +83,13 @@ var isStateEqual = function (state1, state2) {
 }
 
 
-// follow is a set of object
-var initFollow = function (pd, endNonTerminal) {
-	var follow = {}
-	for (var nonTerminal of pd.getNonTerminals()) {
-		follow[nonTerminal] = new Set
-	}
-	follow[endNonTerminal].add(Production.END)
-	return follow
-}
-
-
 /**
  ** pc:             ProductionCollection
  ** endNonTerminal: 非终结符
  ** first:          optional first array
  */
 var getFollow = function (pc, endNonTerminal, first = deduceFirst(pc)) {
-	var follow = initFollow(pc, endNonTerminal)
+	var follow = new Follow(pc, endNonTerminal)
 	var state = recordState(follow)
 
 	while (true) {
@@ -126,8 +103,17 @@ var getFollow = function (pc, endNonTerminal, first = deduceFirst(pc)) {
 	return follow
 }
 
-getFollow._initFollow = initFollow
 getFollow._recordState = recordState
-getFollow._followToJSON = followToJSON
 
 module.exports = getFollow
+
+
+//// follow is a set of object
+//var initFollow = function (pd, endNonTerminal) {
+//	var follow = {}
+//	for (var nonTerminal of pd.getNonTerminals()) {
+//		follow[nonTerminal] = new Set
+//	}
+//	follow[endNonTerminal].add(Production.END)
+//	return follow
+//}
