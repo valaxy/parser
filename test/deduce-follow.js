@@ -99,6 +99,20 @@ define(function (require) {
 	})
 
 
+	QUnit.test('case7', function (assert) {
+		var pc = new ProductionCollection([
+			['A', ['B', Production.EMPTY, 'C']],
+			['B', ['b']],
+			['C', ['c']]
+		])
+		assert.deepEqual(deduceFollow(pc, 'A').toJSON(), {
+			A: [Production.END],
+			B: ['c'],
+			C: [Production.END]
+		})
+	})
+
+
 	QUnit.test('sample1', function (assert) {
 		var pc = pcStore.sample1()
 		assert.deepEqual(deduceFollow(pc, 'E').toJSON(), {

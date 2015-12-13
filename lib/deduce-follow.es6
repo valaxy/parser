@@ -38,13 +38,13 @@ var deduce = function (pc, first, follow) {
 			var isEmptyInGroup = true
 			var groupFirstSetWithoutEmpty = new Set
 			for (var i = body.length - 1; i >= 0; i--) {
-				var bodySymbol = body[i]
+				var bodySymbol = body[i] // count about bodySymbol
 
 				if (pc.isTerminal(bodySymbol)) {
-					// @日志, 这里也要判断是否是空字符
+					// @bug log, should judge by bodySymbol equals or no equals Production.EMPTY
 					if (bodySymbol == Production.EMPTY) {
-						isEmptyInGroup = true
-						groupFirstSetWithoutEmpty = new Set()
+						// @bug log: isEmptyInGroup don't need to change whether it is true or false
+						// @bug log: groupFirstSetWithoutEmpty don't need to change
 					} else {
 						isEmptyInGroup = false
 						groupFirstSetWithoutEmpty = new Set([bodySymbol])
