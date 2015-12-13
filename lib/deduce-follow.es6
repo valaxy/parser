@@ -1,13 +1,15 @@
-var Production = require('./data/production')
-var _ = require('underscore')
-var deduceFirst = require('./deduce-first'),
+var Production  = require('./data/production'),
+    _           = require('underscore'),
+    deduceFirst = require('./deduce-first'),
     Follow      = require('./data/follow')
 
 
 // 计算FOLLOW(A)
 // - 在某些句型中紧跟在A右边的终结符号的集合
 // - $也可能在FOLLOW表中
-// - 算法参考: http://blog.csdn.net/ptsntwsz/article/details/6944474
+// - Algorithm reference:
+//      - http://blog.csdn.net/ptsntwsz/article/details/6944474
+//      - the Dragon book(second edition) 4.4.2
 
 /*--------------------------------------------------------------------
  * @日志: 论类型推导工具为什么能帮助提供生产力
@@ -23,9 +25,9 @@ var deduceFirst = require('./deduce-first'),
  *-------------------------------------------------------------------*/
 
 
-var addFirstToSet = function (first, symbol, s) {
-	first.get(symbol).forEach(function (key) {
-		s.add(key)
+var addFirstToSet = function (first, bodySymbol, _set) {
+	first.get(bodySymbol).forEach(function (symbol) {
+		_set.add(symbol)
 	})
 }
 
@@ -33,29 +35,37 @@ var deduce = function (pc, first, follow) {
 	pc.getNonTerminals().forEach(function (nonTerminal) {
 		pc.getProductionsBySymbol(nonTerminal).forEach(function (production) {
 			var body = production.body()
-			var allIsEmpty = true
-			var restFirst = new Set
+			var isEmptyInGroup = true
+			var groupFirstSetWithoutEmpty = new Set
 			for (var i = body.length - 1; i >= 0; i--) {
-				var ch = body[i]
-				if (pc.isTerminal(ch)) {
-					allIsEmpty = false
-					restFirst = new Set([ch])
+				var bodySymbol = body[i]
+
+				if (pc.isTerminal(bodySymbol)) {
+					// @日志, 这里也要判断是否是空字符
+					if (bodySymbol == Production.EMPTY) {
+						isEmptyInGroup = true
+						groupFirstSetWithoutEmpty = new Set()
+					} else {
+						isEmptyInGroup = false
+						groupFirstSetWithoutEmpty = new Set([bodySymbol])
+					}
 					continue
 				}
 
-				if (allIsEmpty) {
-					follow.addTo(production.head(), ch)
+				follow.addRange(bodySymbol, groupFirstSetWithoutEmpty)
+				if (isEmptyInGroup) {
+					follow.addTo(production.head(), bodySymbol)
 				}
-				follow.addRange(ch, restFirst)
 
-				if (first.has(ch, Production.EMPTY)) { // todo, bug!, 以前用的是 in xx(xx实际是个Array), 添加测试单元测试用例保证
-					// keep allIsEmpty
-					addFirstToSet(first, ch, restFirst)
-					restFirst.delete(Production.EMPTY)
+				// recount isEmptyInGroup & groupFirstSetWithoutEmpty
+				if (first.has(bodySymbol, Production.EMPTY)) {
+					// isEmptyInGroup don't need to change whether it is true or false
+					addFirstToSet(first, bodySymbol, groupFirstSetWithoutEmpty)
+					groupFirstSetWithoutEmpty.delete(Production.EMPTY) // after delete there is no empty
 				} else {
-					allIsEmpty = false
-					restFirst = new Set
-					addFirstToSet(first, ch, restFirst)
+					isEmptyInGroup = false
+					groupFirstSetWithoutEmpty = new Set
+					addFirstToSet(first, bodySymbol, groupFirstSetWithoutEmpty) // there is no empty
 				}
 			}
 		})
@@ -83,12 +93,12 @@ var isStateEqual = function (state1, state2) {
 }
 
 
-/**
+/** Deduce follow
  ** pc:             ProductionCollection
  ** endNonTerminal: 非终结符
  ** first:          optional first array
  */
-var getFollow = function (pc, endNonTerminal, first = deduceFirst(pc)) {
+var deduceFollow = function (pc, endNonTerminal, first = deduceFirst(pc)) {
 	var follow = new Follow(pc, endNonTerminal)
 	var state = recordState(follow)
 
@@ -103,17 +113,6 @@ var getFollow = function (pc, endNonTerminal, first = deduceFirst(pc)) {
 	return follow
 }
 
-getFollow._recordState = recordState
+deduceFollow._recordState = recordState
 
-module.exports = getFollow
-
-
-//// follow is a set of object
-//var initFollow = function (pd, endNonTerminal) {
-//	var follow = {}
-//	for (var nonTerminal of pd.getNonTerminals()) {
-//		follow[nonTerminal] = new Set
-//	}
-//	follow[endNonTerminal].add(Production.END)
-//	return follow
-//}
+module.exports = deduceFollow

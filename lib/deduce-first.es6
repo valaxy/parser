@@ -5,7 +5,8 @@ var Production = require('./data/production'),
 // 计算FIRST(α)表:
 // - 可从α推导得到的串的首符号的集合(终结符号)
 // - ε也可能FIRST表中
-
+// - Algorithm reference:
+//      - the Dragon book(second edition) 4.4.2
 
 // state is mark for algorithm of deduce-first
 const STATE_NULL = 0

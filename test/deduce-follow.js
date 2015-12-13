@@ -20,7 +20,7 @@ define(function (require) {
 		assert.deepEqual(state, [2, 1, 3, 0])
 	})
 
-	QUnit.test('simple case1', function (assert) {
+	QUnit.test('case1', function (assert) {
 		var pc = new ProductionCollection
 		pc.add(new Production('A'))
 		assert.deepEqual(deduceFollow(pc, 'A').toJSON(), {
@@ -28,7 +28,7 @@ define(function (require) {
 		})
 	})
 
-	QUnit.test('simple case2', function (assert) {
+	QUnit.test('case2', function (assert) {
 		var pc = new ProductionCollection
 		pc.add(new Production('A', ['a', 'b']))
 		assert.deepEqual(deduceFollow(pc, 'A').toJSON(), {
@@ -36,7 +36,7 @@ define(function (require) {
 		})
 	})
 
-	QUnit.test('simple case3', function (assert) {
+	QUnit.test('case3', function (assert) {
 		var pc = new ProductionCollection
 		pc.add(new Production('A', ['a', 'B', 'c']))
 		pc.add(new Production('B', ['x']))
@@ -47,7 +47,7 @@ define(function (require) {
 	})
 
 
-	QUnit.test('complex case1', function (assert) {
+	QUnit.test('case4', function (assert) {
 		var pc = new ProductionCollection([
 			["T", ["F", "T'"]],
 			["T'", ['*', "F", "T'"]],
@@ -62,7 +62,7 @@ define(function (require) {
 	})
 
 
-	QUnit.test('complex case2', function (assert) {
+	QUnit.test('case5', function (assert) {
 		var pc = new ProductionCollection([
 			['E', ['T', "E'"]],
 			["E'", ['+', 'T', "E'"]],
@@ -79,6 +79,22 @@ define(function (require) {
 			"T" : [')', '+', Production.END],
 			"T'": [')', '+', Production.END],
 			"F" : [')', '*', '+', Production.END]
+		})
+	})
+
+
+	QUnit.test('case6', function (assert) {
+		var pc = new ProductionCollection([
+			['A', ['D', Production.EMPTY]],
+			['B', ['a']],
+			['C', ['A', 'B']],
+			['D', ['d']]
+		])
+		assert.deepEqual(deduceFollow(pc, 'C').toJSON(), {
+			A: ['a'],
+			B: [Production.END],
+			C: [Production.END],
+			D: ['a']
 		})
 	})
 
