@@ -1,6 +1,6 @@
 define(function (require) {
-	var ProductionCollection = require('cjs!../dist/production-collection'),
-	    Production           = require('cjs!../dist/production')
+	var ProductionCollection = require('cjs!../lib/production-collection'),
+	    Production           = require('cjs!../lib/production')
 
 
 	return {

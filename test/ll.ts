@@ -1,7 +1,7 @@
 define(function (require) {
-	var ll         = require('cjs!../dist/ll'),
+	var ll         = require('cjs!../ll'),
 	    pcStore    = require('./pc-store'),
-	    Production = require('cjs!../dist/data/production')
+	    Production = require('cjs!../lib/data/production')
 
 	QUnit.module('ll')
 

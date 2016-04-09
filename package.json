@@ -5,16 +5,14 @@
   "author": "valaxy",
   "license": "MIT",
   "devDependencies": {
-    "cjs": "github:valaxy/cjs",
-    "grunt": "^0.4.5",
-    "grunt-babel": "^5.0.3",
-    "grunt-contrib-watch": "^0.6.1",
+    "cjs": "github:valaxy/cjs#56d3496c933731ff3ba37578ace17d23bdf7fb8d",
+    "grunt": "^1.0.1",
     "load-grunt-tasks": "^3.3.0",
-    "qunitjs": "^1.20.0",
+    "qunitjs": "^1.23.0",
     "requirejs": "^2.1.22"
   },
   "dependencies": {
-    "algorithm-data-structure": "github:valaxy/algorithm-data-structure",
+    "algorithm-data-structure": "github:valaxy/algorithm-data-structure#8e88335609265e01ffa560e65815e1e8445d89cb",
     "underscore": "^1.8.3"
   }
 }

@@ -1,7 +1,7 @@
 define(function (require) {
-	var deduceFollow         = require('cjs!../dist/deduce-follow'),
-	    ProductionCollection = require('cjs!../dist/data/production-collection'),
-	    Production           = require('cjs!../dist/data/production'),
+	var deduceFollow         = require('cjs!../deduce-follow'),
+	    ProductionCollection = require('cjs!../data/production-collection'),
+	    Production           = require('cjs!../data/production'),
 	    pcStore              = require('./pc-store')
 
 	QUnit.module('deduceFollow()')
@@ -123,7 +123,7 @@ define(function (require) {
 
 
 	QUnit.test('sample json', function (assert) {
-		var pc = require('cjs!../dist/rule/json')
+		var pc = require('cjs!../lib/rule/json')
 		assert.deepEqual(deduceFollow(pc, 'object').toJSON(), {
 			value        : [',', ']', '}'],
 			object       : [',', Production.END, ']', '}'],

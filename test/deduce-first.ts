@@ -1,7 +1,7 @@
 define(function (require) {
-	var deduceFirst          = require('cjs!../dist/deduce-first'),
-	    ProductionCollection = require('cjs!../dist/data/production-collection'),
-	    Production           = require('cjs!../dist/data/production'),
+	var deduceFirst          = require('cjs!../deduce-first'),
+	    ProductionCollection = require('cjs!../data/production-collection'),
+	    Production           = require('cjs!../data/production'),
 	    pcStore              = require('./pc-store')
 
 	QUnit.module('deduceFirst()')
@@ -208,7 +208,7 @@ define(function (require) {
 
 
 	QUnit.test('sample json', function (assert) {
-		var pc = require('cjs!../dist/rule/json')
+		var pc = require('cjs!../lib/rule/json')
 		assert.deepEqual(pc.getNonTerminals(), ['value', 'object', 'objectBody', 'objectMembers', 'objectMember', 'array', 'arrayBody', 'arrayMembers'])
 		assert.deepEqual(deduceFirst(pc).toExtendJSON(), {
 			value        : {

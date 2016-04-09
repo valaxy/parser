@@ -1,6 +1,6 @@
 define(function (require) {
 	var pcStore = require('./pc-store'),
-	    predict = require('cjs!../dist/deduce-predict')
+	    predict = require('cjs!../lib/deduce-predict')
 
 	QUnit.module('deducePredict()')
 
